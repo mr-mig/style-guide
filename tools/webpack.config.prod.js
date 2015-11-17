@@ -3,10 +3,11 @@
 var version = require('./../package.json').version;
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
 
 var rootPath = path.join(__dirname, '..');
 
-function root(p) {
+function root(p){
   return path.join(rootPath, p);
 }
 
@@ -21,7 +22,6 @@ var distPath = root('dist');
 
 module.exports = {
   entry: [
-    'webpack-hot-middleware/client?reload=true',
     './src/entry'
   ],
   output: {
@@ -30,10 +30,19 @@ module.exports = {
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false
+      },
+      compressor: {
+        warnings: false
+      }
+    }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development'),
+      'process.env.NODE_ENV': JSON.stringify('production'),
       APP_VERSION: JSON.stringify(version)
     })
   ],
@@ -54,22 +63,7 @@ module.exports = {
         query: {
           stage: 2,
           optional: ['es7.classProperties'],
-          loose: 'all',
-          plugins: ['react-transform:after'],
-          extra: {
-            'react-transform': {
-              'transforms': [
-                {
-                  'transform': 'react-transform-hmr',
-                  'imports': ['react'],
-                  'locals': ['module']
-                }, {
-                  'transform': 'react-transform-catch-errors',
-                  'imports': ['react', 'redbox-react']
-                }
-              ]
-            }
-          }
+          loose: 'all'
         }
       },
       {
@@ -100,3 +94,6 @@ module.exports = {
     ]
   }
 };
+
+
+
