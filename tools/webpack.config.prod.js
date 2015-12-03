@@ -3,11 +3,10 @@
 var version = require('./../package.json').version;
 var path = require('path');
 var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
 
 var rootPath = path.join(__dirname, '..');
 
-function root(p){
+function root(p) {
   return path.join(rootPath, p);
 }
 
@@ -16,7 +15,6 @@ var componentsPath = root('src/components');
 var sassPath = root('src/sass');
 var docsPath = root('src/docs');
 var fontsPath = root('src/fonts');
-
 
 var distPath = root('dist');
 
@@ -44,7 +42,7 @@ module.exports = {
       compressor: {
         warnings: false
       }
-    }),
+    })
   ],
   resolve : {
     alias : {
@@ -94,6 +92,3 @@ module.exports = {
     ]
   }
 };
-
-
-
